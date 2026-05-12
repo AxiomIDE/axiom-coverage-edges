@@ -1,0 +1,17 @@
+name: axiom-official/axiom-coverage-edges
+version: 0.1.0
+language: go
+description: 'Wave-system fixture: tests edge adapter/conversion plans (field rename, type widen, etc.).'
+nodes:
+    - name: EmitFoo
+      input: FooMsg
+      output: FooMsg
+    - name: EatBar
+      input: BarMsg
+      output: BarMsg
+    - name: EmitInt32
+      input: Int32Msg
+      output: Int32Msg
+    - name: EatInt64
+      input: Int64Msg
+      output: Int64Msg
