@@ -1,7 +1,7 @@
 name: axiom-official/axiom-coverage-edges
-version: 0.1.0
+version: 0.2.0
 language: go
-description: 'Wave-system fixture: tests edge adapter/conversion plans (field rename, type widen, etc.).'
+description: 'Wave-system fixture: tests edge adapter/conversion plans (field rename, type widen, type narrow, nested-extract).'
 nodes:
     - name: EmitFoo
       input: FooMsg
@@ -15,3 +15,19 @@ nodes:
     - name: EatInt64
       input: Int64Msg
       output: Int64Msg
+    - name: EmitInt64
+      description: Source side for int64→int32 narrowing edge tests (reverse pair of EmitInt32). Coverage FR-010.
+      input: Int64Msg
+      output: Int64Msg
+    - name: EatInt32
+      description: Sink side for int64→int32 narrowing edge tests (reverse pair of EatInt64). Coverage FR-010.
+      input: Int32Msg
+      output: Int32Msg
+    - name: EmitNested
+      description: Source side for the edges-conversion/nested-extract variant. Carries Inner submessage. Coverage FR-011.
+      input: NestedMsg
+      output: NestedMsg
+    - name: EatLeaf
+      description: Flat-scalar sink for the edges-conversion/nested-extract variant. Coverage FR-011.
+      input: LeafMsg
+      output: LeafMsg

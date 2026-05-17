@@ -36,3 +36,24 @@ message Int32Msg {
 message Int64Msg {
   int64 value=1;
 }
+
+// Inner is the submessage carried inside NestedMsg. Coverage FR-011 —
+// nested-extract variant.
+message Inner {
+  string value=1;
+}
+
+// NestedMsg carries a nested submessage field. Used as the source side of
+// the edges-conversion/nested-extract variant — adapter expressions
+// project the dotted-path "inner.value" through the edge into a flat
+// scalar destination. Coverage FR-011.
+message NestedMsg {
+  Inner inner=1;
+}
+
+// LeafMsg is the flat-scalar destination of the edges-conversion/
+// nested-extract variant — receives the projection of NestedMsg.inner.value.
+// Coverage FR-011.
+message LeafMsg {
+  string leaf=1;
+}
