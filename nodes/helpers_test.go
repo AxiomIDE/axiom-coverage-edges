@@ -59,11 +59,31 @@ func (testSessionHistory) Last(_ context.Context, _ int) ([]axiom.ConversationTu
 }
 func (testSessionHistory) Append(_ context.Context, _, _ string) error { return nil }
 
-func (c *testContext) Log() axiom.Logger      { return &testLogger{c.t} }
-func (c *testContext) Secrets() axiom.Secrets { return testSecrets{c.secretsMap} }
-func (c *testContext) Agent() axiom.Agent     { return testAgent{} }
-func (c *testContext) ExecutionID() string    { return "test-execution-id" }
-func (c *testContext) FlowID() string         { return "test-flow-id" }
-func (c *testContext) TenantID() string       { return "test-tenant-id" }
+func (c *testContext) Log() axiom.Logger            { return &testLogger{c.t} }
+func (c *testContext) Secrets() axiom.Secrets       { return testSecrets{c.secretsMap} }
+func (c *testContext) Agent() axiom.Agent           { return testAgent{} }
+func (c *testContext) ExecutionID() string          { return "test-execution-id" }
+func (c *testContext) FlowID() string               { return "test-flow-id" }
+func (c *testContext) TenantID() string             { return "test-tenant-id" }
+func (c *testContext) Reflection() axiom.Reflection { return emptyReflection{} }
 
 var _ axiom.Context = (*testContext)(nil)
+
+// ADR-050 (2026-05-26): the axiom.Context interface added Reflection() so
+// every node SDK has access to ax.Reflection().Flow().*. None of the
+// fixture nodes here use reflection (they're pure type-converters for edge
+// tests), so the test injects an empty reflection rather than building a
+// populated FlowReflection. axiom build regenerates axiom/context.go with
+// the Reflection types referenced below.
+
+type emptyReflection struct{}
+
+func (emptyReflection) Flow() axiom.FlowReflection { return emptyFlowReflection{} }
+
+type emptyFlowReflection struct{}
+
+func (emptyFlowReflection) Nodes() []axiom.ReflectionNode     { return nil }
+func (emptyFlowReflection) Edges() []axiom.ReflectionEdge     { return nil }
+func (emptyFlowReflection) LoopEdges() []axiom.ReflectionEdge { return nil }
+func (emptyFlowReflection) Position() axiom.FlowPosition      { return axiom.FlowPosition{} }
+func (emptyFlowReflection) GraphID() string                   { return "" }
