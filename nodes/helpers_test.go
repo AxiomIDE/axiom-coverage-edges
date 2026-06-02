@@ -80,7 +80,7 @@ func (testMutation) Flow() axiom.FlowMutation { return testFlowMutation{} }
 type testFlowMutation struct{}
 
 func (testFlowMutation) AddNode(_, _ string, _ *axiom.CanvasPosition) uint32 { return 0 }
-func (testFlowMutation) AddEdge(_, _ uint32)                                 {}
+func (testFlowMutation) AddEdge(_, _ uint32, _ *axiom.EdgeCondition)         {}
 
 var _ axiom.Context = (*testContext)(nil)
 
